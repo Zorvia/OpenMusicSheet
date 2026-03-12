@@ -5,8 +5,6 @@
 
 mod midi_bridge;
 
-use tauri::Manager;
-
 #[tauri::command]
 fn parse_midi_file(path: String) -> Result<String, String> {
     midi_bridge::parse_midi(&path).map_err(|e| e.to_string())

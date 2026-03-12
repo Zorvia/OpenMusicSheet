@@ -135,7 +135,7 @@ pub fn write_midi(path: &str, json_data: &str) -> Result<(), Box<dyn std::error:
             Format::Parallel,
             Timing::Metrical(midly::num::u15::new(data.ticks_per_beat)),
         ),
-        tracks: tracks_out.iter().map(|t| t.as_slice()).collect(),
+        tracks: tracks_out,
     };
 
     let mut buffer = Vec::new();
