@@ -1,0 +1,26 @@
+#!/bin/sh
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx|js|jsx|rs|css|py)$')
+
+if [ -z "$STAGED_FILES" ]; then
+  exit 0
+fi
+
+HAS_COMMENTS=0
+
+for FILE in $STAGED_FILES; do
+  RESULT=$(grep -nE '(^\s*//|/\*|\*/|^\s*#[^!\[]|^\s*'\'''\'''\''|^\s*""")' "$FILE" || true)
+  if [ -n "$RESULT" ]; then
+    echo "Comments found in $FILE:"
+    echo "$RESULT"
+    HAS_COMMENTS=1
+  fi
+done
+
+if [ $HAS_COMMENTS -eq 1 ]; then
+  echo ""
+  echo "ERROR: Comments detected in staged files. Remove all comments before committing."
+  exit 1
+fi
+
+exit 0
